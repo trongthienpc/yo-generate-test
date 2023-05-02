@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  node:
+    build:
+      context: ./
+      dockerfile: docker/node/Dockerfile
+      target: development
+    container_name: test-yo-test
+    entrypoint: dockerize -wait tcp://db:5432 -timeout 30s yarn test:e2e
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: test
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: test-yo-test
+      DB_PASSWORD: test-yo-test
+      DB_NAME: test-yo_test
+    volumes:
+      - ./src:/home/node/app/src
+      - ./test:/home/node/app/test
+      - /home/node/node_modules
+
+  db:
+    image: postgres:12.3
+    container_name: test-yo-db-test
+    environment:
+      POSTGRES_USER: test-yo-test
+      POSTGRES_PASSWORD: test-yo-test
+      POSTGRES_DB: test-yo_test
+    ports:
+      - 5432:5432

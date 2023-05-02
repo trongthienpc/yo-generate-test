@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "inlineSources": true,
+    "rootDir": "./src",
+    "sourceRoot": "/"
+  },
+  "files": ["./src/types/index.d.ts"],
+  "exclude": ["node_modules", "db", "public", "test", "jest*.config.ts"]
+}

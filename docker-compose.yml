@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  node:
+    build:
+      context: ./
+      dockerfile: docker/node/Dockerfile
+    image: test-yo
+    container_name: test-yo
+    depends_on:
+      - db
+      - redis
+    env_file: .env
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+    expose:
+      - ${PORT}
+    tty: true
+    volumes:
+      - /home/node/node_modules
+
+  db:
+    image: postgres:12.3
+    container_name: test-yo-db
+    environment:
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_NAME
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  migrate:
+    image: test-yo
+    container_name: test-yo-migrate
+    entrypoint: dockerize -wait tcp://db:{DB_PORT} -timeout 30s yarn migrations:migrate
+    environment:
+      DB_HOST: db
+    depends_on:
+      - db
+      - node
+
+  redis:
+    image: redis:alpine
+    container_name: test-yo-redis
+    command: --port ${REDIS_PORT}
+    expose:
+      - ${REDIS_PORT}
+
+volumes:
+  db_data:

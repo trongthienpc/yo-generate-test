@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  node:
+    build:
+      target: development
+    entrypoint: dockerize -wait tcp://db:${DB_PORT} -wait tcp://redis:${REDIS_PORT} -timeout 30s yarn start:dev
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./src:/home/node/app/src

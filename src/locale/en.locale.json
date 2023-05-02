@@ -1,0 +1,11 @@
+{
+  "errors": {
+    "emailAlreadyUsed": "An account with this email address already exists.",
+    "internalServerError": "Internal server error.",
+    "invalidAuthentication": "Invalid authentication.",
+    "invalidCredentials": "Invalid credentials.",
+    "routeNotFound": "The route '{{method}} {{baseUrl}}{{url}}' doesn't exist.",
+    "tooManyRequests": "Too many requests, please try again later.",
+    "userNotFound": "User not found."
+  }
+}
